@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <title>The Go Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            text-align: center;
+            background-color: #E0EBF5;
+        }
+
+        div {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        .output {
+            background-color: white;
+            width: 500px;
+            display: inline-block;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <p>The Go Playground</p>
+    </div>
+
+    <div>
+        <button onclick="runCode()">Run</button>
+    </div>
+
+    <div>
+        <textarea cols="100" rows="30"></textarea>
+    </div>
+
+    <div class="output"></div>
+
+    <script>
+        const txt = document.querySelector("textarea")
+        const out = document.querySelector('.output')
+
+        const updateOutput = (param) => out.innerText = param
+
+        const runCode = () => {
+            updateOutput('Waiting for remote server ...')
+            fetch("/code", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: txt.value
+                })
+            })
+                .then(r => r.json())
+                .then(r => updateOutput(r.data))
+        }
+    </script>
+
+</body>
+
+</html>
